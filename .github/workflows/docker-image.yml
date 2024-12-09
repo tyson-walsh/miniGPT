@@ -3,10 +3,6 @@ name: Build and Push Docker Image
 on:
   push:
     branches: [ main ]
-    # You can specify paths if you only want to trigger on changes to certain files
-    # paths:
-    #   - 'miniGPT_dockerfile'
-    #   - 'requirements.txt'
 
 jobs:
   build_and_push:
@@ -25,17 +21,18 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to Docker Hub
+      - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
-          registry: docker.io
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          # Since you named your secret "miniGPT", use that here:
+          password: ${{ secrets.miniGPT }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: miniGPT_dockerfile         # This is crucial since your file is not named 'Dockerfile'
+          file: miniGPT_dockerfile
           push: true
-          tags: docker.io/${{ secrets.DOCKER_USERNAME }}/minigpt:latest
+          tags: ghcr.io/${{ github.repository_owner }}/minigpt:latest
