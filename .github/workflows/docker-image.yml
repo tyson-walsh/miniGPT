@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write
+      packages: write  # Needed to write to GHCR
 
     steps:
       - name: Check out the repository
@@ -26,8 +26,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          # Since you named your secret "miniGPT", use that here:
-          password: ${{ secrets.miniGPT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image to GHCR
         uses: docker/build-push-action@v3
