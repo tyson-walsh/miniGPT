@@ -1,0 +1,8 @@
+FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
+
+# Copy requirements into the image
+COPY requirements.txt /tmp/requirements.txt
+
+# Install all packages listed in requirements.txt
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r /tmp/requirements.txt
